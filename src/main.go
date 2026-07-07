@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	bytes, err := os.ReadFile("example/01.lang")
+	bytes, err := os.ReadFile("example/02.lang")
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 	}
@@ -19,4 +19,8 @@ func main() {
 		token.Debug()
 		println()
 	}
+
+	
+
+
 }
