@@ -3,8 +3,6 @@ package parser
 import (
 	"github.com/imajaygiri/parser/src/ast"
 	"github.com/imajaygiri/parser/src/lexer"
-	"github.com/imajaygiri/parser/src/utils"
-	"strconv"
 )
 
 type binding_power int
