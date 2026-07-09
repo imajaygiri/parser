@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/imajaygiri/parser/src/lexer"
 	"os"
+
+	"github.com/imajaygiri/parser/src/lexer"
+	"github.com/imajaygiri/parser/src/parser"
+	"github.com/sanity-io/litter"
 )
 
 func main() {
@@ -11,16 +14,13 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 	}
-	fmt.Printf("source: %s\n", string(bytes))
-
 	tokens := lexer.Tokenize(string(bytes))
+	ast := parser.Parse(tokens)
+	litter.Dump(ast)
 
-	for _, token := range tokens {
-		token.Debug()
-		println()
-	}
-
-	
-
+	// for _, token := range tokens {
+	// 	token.Debug()
+	// 	println()
+	// }
 
 }

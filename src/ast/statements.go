@@ -13,5 +13,5 @@ type ExpressionStmt struct {
 	Expression Expr
 }
 
-func (n ExpressionStmt) Stmt() {
+func (n ExpressionStmt) stmt() {
 }

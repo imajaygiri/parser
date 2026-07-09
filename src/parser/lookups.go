@@ -21,10 +21,6 @@ const (
 	primary                             // bp = 10
 )
 
-func (bp binding_power) Value() int {
-	return int(bp)
-}
-
 type stmt_handler func(p *parser) ast.Stmt
 type nud_handler func(p *parser) ast.Expr
 type led_handler func(p *parser, left ast.Expr, bp binding_power) ast.Expr
@@ -55,6 +51,23 @@ func stmt(kind lexer.TokenKind, stmt_fn stmt_handler) {
 }
 
 func createTokenLookups() {
+	// logical
+	led(lexer.AND, logical, parse_binary_expr)
+	led(lexer.OR, logical, parse_binary_expr)
+	led(lexer.DOT_DOT, logical, parse_binary_expr) // 10..math.random()
+	// relational
+	led(lexer.LESS, relational, parse_binary_expr)
+	led(lexer.LESS_EQUALS, relational, parse_binary_expr)
+	led(lexer.GREATER, relational, parse_binary_expr)
+	led(lexer.GREATER_EQUALS, relational, parse_binary_expr)
+	led(lexer.EQUALS, relational, parse_binary_expr)
+	led(lexer.NOT_EQUALS, relational, parse_binary_expr)
+	//additive and multiplicative
+	led(lexer.PLUS, additive, parse_binary_expr)
+	led(lexer.DASH, additive, parse_binary_expr)
+	led(lexer.STAR, multiplicative, parse_binary_expr)
+	led(lexer.SLASH, multiplicative, parse_binary_expr)
+	led(lexer.PERCENT, multiplicative, parse_binary_expr)
 	// Literals & symbols
 	nud(lexer.NUMBER, parse_primary_expr)
 	nud(lexer.STRING, parse_primary_expr)

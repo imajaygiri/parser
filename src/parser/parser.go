@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/imajaygiri/parser/src/ast"
 	"github.com/imajaygiri/parser/src/lexer"
 )
@@ -32,6 +34,27 @@ func (p *parser) advance() lexer.Token {
 
 func (p *parser) hasTokens() bool {
 	return p.pos < len(p.tokens) && p.currentTokenKind() != lexer.EOF
+}
+
+func (p *parser) expectError(expectedKind lexer.TokenKind, err any) lexer.Token {
+	token := p.currentToken()
+	kind := token.Kind
+
+	if kind != expectedKind {
+		if err == nil {
+			err = fmt.Sprintf(
+				"Expected %s but recieved instead %\n.",
+				expectedKind.ToString(),
+				kind.ToString(),
+			)
+		}
+		panic(err)
+	}
+	return p.advance()
+}
+
+func (p *parser) expect(expectedKind lexer.TokenKind) lexer.Token {
+	return p.expectError(expectedKind, nil)
 }
 
 func Parse(tokens []lexer.Token) ast.BlockStmt {
