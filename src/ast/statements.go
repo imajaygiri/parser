@@ -15,3 +15,14 @@ type ExpressionStmt struct {
 
 func (n ExpressionStmt) stmt() {
 }
+
+type VarDecStmt struct {
+	VariableName  string // let name = "ajay_giri";
+	IsConstant    bool
+	AssignedValue Expr
+	// ExplicitType Type // future plan
+}
+
+func (n VarDecStmt) stmt() {
+
+}

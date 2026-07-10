@@ -1,0 +1,12 @@
+// first part infered types
+
+let num = 45.6;
+let name = "ajaygiri";
+
+let wrong = "kuchbhi" + 10;
+const isGreater = num > 10; // this is comment
+
+// add support for custom types
+
+let numbers: []number;
+

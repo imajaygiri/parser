@@ -72,4 +72,7 @@ func createTokenLookups() {
 	nud(lexer.NUMBER, parse_primary_expr)
 	nud(lexer.STRING, parse_primary_expr)
 	nud(lexer.INDENTIFIER, parse_primary_expr)
+	//statements
+	stmt(lexer.CONST, parse_var_dec_stmt)
+	stmt(lexer.LET, parse_var_dec_stmt)
 }

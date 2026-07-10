@@ -10,17 +10,12 @@ import (
 )
 
 func main() {
-	bytes, err := os.ReadFile("example/02.lang")
+	bytes, err := os.ReadFile("example/03.lang")
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 	}
 	tokens := lexer.Tokenize(string(bytes))
 	ast := parser.Parse(tokens)
 	litter.Dump(ast)
-
-	// for _, token := range tokens {
-	// 	token.Debug()
-	// 	println()
-	// }
 
 }

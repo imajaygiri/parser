@@ -22,3 +22,22 @@ func parse_stmt(p *parser) ast.Stmt {
 	}
 
 }
+
+func parse_var_dec_stmt(p *parser) ast.Stmt {
+	isConstant := p.advance().Kind == lexer.CONST
+
+	varName := p.expectError(
+		p.currentTokenKind(),
+		"Expected variableName[indentifier]\n",
+	).Value
+
+	p.expect(lexer.ASSIGNMENT)
+	assignedValue := parse_expr(p, assignment)
+	p.expect(lexer.SEMI_COLON)
+
+	return ast.VarDecStmt{
+		VariableName:  varName,
+		IsConstant:    isConstant,
+		AssignedValue: assignedValue,
+	}
+}
