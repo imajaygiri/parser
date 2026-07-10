@@ -1,0 +1,5 @@
+// implementing types
+const age: number = 10
+
+let name = "Ajay Giri"
+
