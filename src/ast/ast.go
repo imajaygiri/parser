@@ -9,3 +9,21 @@ type Stmt interface {
 type Expr interface {
 	expr()
 }
+
+type Type interface {
+	_type()
+}
+
+type StructInstantiation struct {
+	StructName string
+	Properties map[string]Expr
+}
+
+func (n StructInstantiation) expr() {}
+
+type ArrayInstantiationExpr struct {
+	Underlying Type
+	Contents   []Expr
+}
+
+func (n ArrayInstantiationExpr) expr(){}

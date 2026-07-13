@@ -60,6 +60,7 @@ func (p *parser) expect(expectedKind lexer.TokenKind) lexer.Token {
 func Parse(tokens []lexer.Token) ast.BlockStmt {
 	Body := make([]ast.Stmt, 0)
 	createTokenLookups()
+	createTokenTypeLookup()
 	p := createParser(tokens)
 	for p.hasTokens() {
 		Body = append(Body, parse_stmt(p))

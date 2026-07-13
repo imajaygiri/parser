@@ -3,7 +3,9 @@ package parser
 import (
 	"fmt"
 	"strconv"
+
 	"github.com/imajaygiri/parser/src/ast"
+	"github.com/imajaygiri/parser/src/helpers"
 	"github.com/imajaygiri/parser/src/lexer"
 	"github.com/imajaygiri/parser/src/utils"
 )
@@ -12,7 +14,7 @@ func parse_expr(p *parser, bp binding_power) ast.Expr {
 	tokenKind := p.currentTokenKind()
 	nud_handler, ok := nud_lu[tokenKind]
 	if !ok {
-		panic(fmt.Sprintf("No handler for [%s]\n", tokenKind.ToString()))
+		panic(fmt.Sprintf("No Nud handler for [%s]\n", tokenKind.ToString()))
 	}
 	// pos of parser is updated by nud_handler
 	left := nud_handler(p)
@@ -98,4 +100,58 @@ func parse_grouping_expr(p *parser) ast.Expr {
 	expr := parse_expr(p, default_bp)
 	p.expect(lexer.CLOSE_PAREN) // exepected grouping end )
 	return expr
+}
+
+func parse_struct_instantiation_expr(p *parser, left ast.Expr, bp binding_power) ast.Expr {
+	structName := helpers.ExpectType[ast.SymbolExpr](left).Value
+	properties := make(map[string]ast.Expr)
+	p.expect(lexer.OPEN_CURLY)
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
+		varPropertyName := p.expect(lexer.INDENTIFIER).Value
+		p.expect(lexer.COLON)
+		expr := parse_expr(p, logical)
+
+		_, exist := properties[varPropertyName]
+
+		if exist {
+			panic(fmt.Sprintf("Duplicate properties --> [%s]\n", varPropertyName))
+		}
+		properties[varPropertyName] = expr
+
+		if p.currentTokenKind() != lexer.CLOSE_CURLY {
+			p.expect(lexer.COMMA)
+		}
+	}
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.StructInstantiation{
+		StructName: structName,
+		Properties: properties,
+	}
+}
+
+func parse_array_instantiation_expr(p *parser) ast.Expr {
+	//[]INDENTIFIER{1,2,3,4}
+	var underlyingType ast.Type
+	contents := make([]ast.Expr, 0)
+
+	p.expect(lexer.OPEN_BRACKET)
+	// array with size will be handled later [size]INDENTIFIER{}
+	p.expect(lexer.CLOSE_BRACKET)
+	underlyingType = parse_type(p, default_bp)
+
+	p.expect(lexer.OPEN_CURLY)
+	for p.hasTokens() && p.currentTokenKind() != lexer.CLOSE_CURLY {
+		contents = append(contents, parse_expr(p, logical))
+
+		if p.currentTokenKind() != lexer.CLOSE_CURLY {
+			p.expect(lexer.COMMA)
+		}
+	}
+	p.expect(lexer.CLOSE_CURLY)
+
+	return ast.ArrayInstantiationExpr{
+		Underlying: underlyingType,
+		Contents:   contents,
+	}
 }

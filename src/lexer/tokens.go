@@ -59,9 +59,13 @@ const (
 	EXPORT
 	TYPEOF
 	IN
+	STRUCT
+	STATIC
 )
 
 type Token struct {
+	// FileName string
+	// LineNumber int
 	Kind  TokenKind
 	Value string
 }
@@ -82,6 +86,8 @@ var reserved_lu map[string]TokenKind = map[string]TokenKind{
 	"export":  EXPORT,
 	"typeof":  TYPEOF,
 	"in":      IN,
+	"struct":  STRUCT,
+	"static":  STATIC,
 }
 
 func TokenKindString(kind TokenKind) string {
@@ -137,6 +143,12 @@ func TokenKindString(kind TokenKind) string {
 		"EXPORT",
 		"TYPEOF",
 		"IN",
+		"STRUCT",
+		"STATIC",
+	}
+
+	if int(kind) >= len(kindsInfo) {
+		panic("Unknown Kind of token\n")
 	}
 	return kindsInfo[kind]
 }

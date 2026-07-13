@@ -1,5 +1,5 @@
-// implementing types
-const age: number = 10
-
-let name = "Ajay Giri"
-
+//const age: number = 10;
+//let name: string = "Ajay Giri";
+//const mat: number  = 10;
+//let n: number = -10 + 20;
+//let arr: [][]number;
